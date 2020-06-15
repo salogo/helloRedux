@@ -1,26 +1,44 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { connect } from 'react-redux'
+import DisplayCounter from './components/DisplayCounter';
 
-function App() {
+function App(props) {
+
+  /*const handleIncrement = () => {
+    props.onIncrement() 
+  }*/
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <div>
+     <h1>{props.ctr}</h1>
+     <button onClick={() => props.onIncrement()}>+ 1</button>
+     <button onClick={() => props.onDecrement()}>- 1</button>
+     <button onClick={() => props.onAddition()}>+ 10</button>
+     <button onClick={() => props.onSubstract()}>- 10</button>
+
+     <DisplayCounter />
+   </div>
   );
 }
 
-export default App;
+// Map Global State to Local Props 
+const mapStateToProps = (state) => {
+  return {
+    // ctr is a local propery and state.counter is the global redux state
+    ctr: state.counter 
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onIncrement: () => dispatch({type: 'INCRE'}),
+    onDecrement: () => dispatch({type: 'DECREM'}),
+    onAddition: () => dispatch({type: 'ADD', value:10}),
+    onSubstract: () => dispatch({type: 'SUB', value:-10})
+  }
+
+  
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
